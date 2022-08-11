@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
         // Moving the actual player 
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
-
+    
         // Jumping code
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
