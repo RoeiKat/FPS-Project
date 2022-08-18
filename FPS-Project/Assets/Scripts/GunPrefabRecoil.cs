@@ -5,7 +5,7 @@ using UnityEngine;
 public class GunPrefabRecoil : MonoBehaviour
 {
     Vector3 currentRotation, targetRotation, targetPosition, currentPosition, initialGunPosition ;
-    public Transform cam;
+    // public Transform cam;
 
     [SerializeField] float recoilX;    
     [SerializeField] float recoilY;    
@@ -13,7 +13,8 @@ public class GunPrefabRecoil : MonoBehaviour
 
     [SerializeField] float kickBackZ;
 
-    public float snappiness, returnAmount;
+    public float snappiness;
+    public float returnAmount;
     
     void Start()
     {
@@ -25,7 +26,7 @@ public class GunPrefabRecoil : MonoBehaviour
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, Time.deltaTime * returnAmount);
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.fixedDeltaTime * snappiness);
         transform.localRotation = Quaternion.Euler(currentRotation);
-        cam.localRotation = Quaternion.Euler(currentRotation);
+        // cam.localRotation = Quaternion.Euler(currentRotation); Add this line for controlling the cam with the weapon
         back();
     }
     public void recoil()
