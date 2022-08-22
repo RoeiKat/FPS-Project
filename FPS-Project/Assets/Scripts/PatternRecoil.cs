@@ -6,8 +6,7 @@ public class PatternRecoil : MonoBehaviour
 {   
     private MouseLook camControl;
     private CameraShake cameraShake;
-    private GunPrefabRecoil gunPrefabRecoil;
-
+    
     public Vector2[] recoilPattern;
 
     float verticalRecoil;
@@ -25,7 +24,6 @@ public class PatternRecoil : MonoBehaviour
     {
         cameraShake = gameObject.GetComponent<CameraShake>();
         camControl = gameObject.GetComponent<MouseLook>();
-        gunPrefabRecoil = gameObject.GetComponentInChildren<GunPrefabRecoil>();
     }
 
     void Update()
@@ -43,7 +41,6 @@ public class PatternRecoil : MonoBehaviour
     {
         time = duration;
         StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
-        gunPrefabRecoil.recoil();
 
         horizontalRecoil = recoilPattern[index].x;
         verticalRecoil = recoilPattern[index].y;

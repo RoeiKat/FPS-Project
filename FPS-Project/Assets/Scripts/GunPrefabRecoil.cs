@@ -16,13 +16,12 @@ public class GunPrefabRecoil : MonoBehaviour
     public float snappiness;
     public float returnAmount;
     
-    void Start()
+
+    // Update is called once per frame
+    public void generateRecoil()
     {
         initialGunPosition = transform.localPosition;
-    }
-    // Update is called once per frame
-    void Update()
-    {
+        recoil();
         targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, Time.deltaTime * returnAmount);
         currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.fixedDeltaTime * snappiness);
         transform.localRotation = Quaternion.Euler(currentRotation);
