@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class Gun : MonoBehaviour
 {
@@ -42,7 +43,6 @@ public class Gun : MonoBehaviour
     void Start()
     {
         currentBullets = bulletsPerMag;
-        // currentAmmo = maxAmmo;
         originalPosition = transform.localPosition;
         patternRecoil = gameObject.GetComponentInParent<PatternRecoil>();
     }
@@ -80,7 +80,7 @@ public class Gun : MonoBehaviour
     void Shoot()
     {
         currentBullets--;
-        // currentAmmo--;
+        
         patternRecoil.startRecoil();
         muzzleFlash.Play();
         generateRecoil();
