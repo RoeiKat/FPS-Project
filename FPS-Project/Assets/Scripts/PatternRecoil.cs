@@ -6,6 +6,7 @@ public class PatternRecoil : MonoBehaviour
 {   
     private MouseLook camControl;
     private CameraShake cameraShake;
+    public Animator weaponController;
     
     public Vector2[] recoilPattern;
 
@@ -37,7 +38,7 @@ public class PatternRecoil : MonoBehaviour
         }
     }
 
-    public void startRecoil()
+    public void startRecoil(string weaponName)
     {
         time = duration;
         StartCoroutine(cameraShake.Shake(shakeDuration, shakeMagnitude));
@@ -46,6 +47,7 @@ public class PatternRecoil : MonoBehaviour
         verticalRecoil = recoilPattern[index].y;
 
         index = nextIndex(index);
+        weaponController.Play("recoil_" + weaponName, 1, 0f);
     }
     
     int nextIndex(int index)

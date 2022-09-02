@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using TMPro;
 
 public class Gun : MonoBehaviour
@@ -31,15 +32,18 @@ public class Gun : MonoBehaviour
     }
 
     [Header("---Weapon Settings---")]
+    public string weaponName;
     public float damage = 10f;
     public float range = 100f;
     public float bulletSpeed = 1000.0f;
     public float bulletDrop = 0.0f;
     public float fireRate = 15f;
-    private float nextRoundToFire = 0.2f;
+    public float nextRoundToFire = 0.2f;
     public float bulletMaxLifeTime = 3f;
+    public LayerMask playerLayer;
+    // weaponHolder is the object which the gun is a child to, thats the object that gets the mesh recoil
+    public Transform weaponHolder;
     List <Bullet> bullets = new List<Bullet>(); 
-
 
     [Header("---Magazine Settings---")]
     public int bulletsPerMag = 30;
@@ -58,45 +62,26 @@ public class Gun : MonoBehaviour
     public Transform rayCastOrigin;
     public Transform rayCastDestination;
 
-    [Header("---AimingDownSights Setting---")]
-    // zoomSpeed should be between 1~0, 1 is the fastest
-    public float zoomSpeed;
-    public float cameraZoomValue;
-    private float cameraFOV;
-    private float cameraZoomFOV;
-    private Vector3 originalPosition;
-    private Quaternion originalRotation;
-    public Vector3 aimingDownSightPosition;
-    public Quaternion aimDownSightsRotation;
-    public float adsSpeed = 3f;
-
     [Header("---Recoil Settings---")]
+    // Pattern recoil is a script which controlls the camera recoil
     public PatternRecoil patternRecoil;
-    [SerializeField] float prefabRecoilZ;
-    Vector3 currentPosition; 
-    Vector3 targetPosition;
 
     [Header("---Weapon Effects---")]
     public GameObject wallHitPrefab;
-    public ParticleSystem shells;
-    [SerializeField] AudioSource shotSound;
+    // public ParticleSystem shells;
+    // [SerializeField] AudioSource shotSound;
     public ParticleSystem muzzleFlash;
     public TrailRenderer tracerEffect;
     
     void Start()
     {
         currentBullets = bulletsPerMag;
-        originalPosition = transform.localPosition;
-        originalRotation = transform.localRotation;
-        cameraFOV = fpsCam.fieldOfView;
-        cameraZoomFOV = fpsCam.fieldOfView - cameraZoomValue;
     }
 
     void Update()
     {
+        patternRecoil = GetComponentInParent<PatternRecoil>();
         updateBullet(Time.deltaTime);
-        currentPosition = transform.localPosition;
-        aimDownSights();
         if(Input.GetKey(KeyCode.R) && currentBullets < 30)
         {
                 startReload();
@@ -109,25 +94,15 @@ public class Gun : MonoBehaviour
             }
             return;
         }
-        if(Input.GetButtonDown("Fire1"))
-        {
-            patternRecoil.resetIndex();
-        }
-        if(Input.GetButton("Fire1") && Time.time >= nextRoundToFire)
-        {
-            nextRoundToFire = Time.time + 1f/fireRate;
-            fireBullet();
-            shotSound.Play();
-            muzzleFlash.Play();
-            generateRecoil();
-            emitShells();
-        }
     }
 
     public void fireBullet()
     {
         currentBullets--;
-        patternRecoil.startRecoil();
+        // shotSound.Play();
+        muzzleFlash.Play();
+        // emitShells();
+        patternRecoil.startRecoil(weaponName);
 
         Vector3 velocity = (rayCastDestination.position - rayCastOrigin.position).normalized * bulletSpeed;
         var bullet = createBullet(rayCastOrigin.position, velocity);
@@ -156,7 +131,7 @@ public class Gun : MonoBehaviour
         float distance = (end - start).magnitude;
         ray.origin = start;
         ray.direction = direction;
-        if(Physics.Raycast(ray, out hitInfo, distance))
+        if(Physics.Raycast(ray, out hitInfo, distance, ~playerLayer))
         {
             //Effects
             Debug.Log(hitInfo.transform);
@@ -182,22 +157,6 @@ public class Gun : MonoBehaviour
         bullets.RemoveAll(bullet => bullet.time >= bulletMaxLifeTime);
     }
 
-    private void aimDownSights()
-    {
-        if(Input.GetButton("Fire2"))
-        {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, aimingDownSightPosition, adsSpeed * Time.deltaTime);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, aimDownSightsRotation, adsSpeed * Time.deltaTime);
-        fpsCam.fieldOfView = Mathf.Lerp(fpsCam.fieldOfView ,cameraZoomFOV, zoomSpeed);
-        }
-        else
-        {
-        transform.localPosition = Vector3.Lerp(transform.localPosition, originalPosition, adsSpeed * Time.deltaTime);
-        transform.localRotation = Quaternion.Slerp(transform.localRotation, originalRotation, adsSpeed * Time.deltaTime);
-        fpsCam.fieldOfView = Mathf.Lerp(fpsCam.fieldOfView, cameraFOV, zoomSpeed);
-        }
-    }
-
     private void startReload()
     {
         if(bulletsLeft <= 0) return;
@@ -209,16 +168,9 @@ public class Gun : MonoBehaviour
         currentBullets += bulletsToDeduct;
     }
 
-    
-    void generateRecoil()
-    {
-        targetPosition = new Vector3(currentPosition.x, currentPosition.y, currentPosition.z - prefabRecoilZ);
-        transform.localPosition = targetPosition;
-    }
-
     void emitShells()
     {
-        shells.Emit(1);
+        // shells.Emit(1);
     }
 }
 

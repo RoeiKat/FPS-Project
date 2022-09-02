@@ -18,8 +18,7 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
-    rigImportErrors: "Copied Avatar Rig Configuration mis-match. Transform hierarchy
-      does not match:\n\tTransform 'Armature' not found in HumanDescription.\n"
+    rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
@@ -490,33 +489,33 @@ ModelImporter:
         length: 0
         modified: 0
     skeleton:
-    - name: Erika Archer(Clone)
+    - name: FullChar(Clone)
       parentName: 
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Erika_Archer_Eyes_Mesh
-      parentName: Erika Archer(Clone)
+      parentName: FullChar(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Erika_Archer_Body_Mesh
-      parentName: Erika Archer(Clone)
+      parentName: FullChar(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Erika_Archer_Clothes_Mesh
-      parentName: Erika Archer(Clone)
+      parentName: FullChar(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Erika_Archer_Eyelashes_Mesh
-      parentName: Erika Archer(Clone)
+      parentName: FullChar(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: mixamorig:Hips
-      parentName: Erika Archer(Clone)
+      parentName: FullChar(Clone)
       position: {x: 0.000022432392, y: 1.0425363, z: 0.015542432}
       rotation: {x: 2.7105054e-18, y: -2.1842864e-34, z: -8.058594e-17, w: 1}
       scale: {x: 1, y: 1, z: 1}

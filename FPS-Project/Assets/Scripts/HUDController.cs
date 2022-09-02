@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class HUDController : MonoBehaviour
 {
     public Health playerHealth;
-    public Gun playerGun;
+    public Transform player;
+    private Gun playerGun;
 
     public TextMeshProUGUI ammoHUD;
 
@@ -22,7 +23,15 @@ public class HUDController : MonoBehaviour
 
     void Update()
     {
-        ammoHUD.text = (playerGun.currentBullets.ToString() + "/" + playerGun.bulletsLeft.ToString());
+        playerGun = player.GetComponentInChildren<Gun>();
+        if(playerGun != null)
+        {
+         ammoHUD.text = (playerGun.currentBullets.ToString() + "/" + playerGun.bulletsLeft.ToString());
+        }
+        else
+        {
+            ammoHUD.text = ("&");
+        }
         healthHUD.text = playerHealth.health.ToString();
         damageTest();
         setSlider();
