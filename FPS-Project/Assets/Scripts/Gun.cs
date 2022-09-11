@@ -6,6 +6,10 @@ using TMPro;
 
 public class Gun : MonoBehaviour
 {
+    public enum AutoOrSemi {
+        Automatic = 0,
+        SemiAuto = 1
+    }
     class Bullet 
     {
         public float time;
@@ -32,6 +36,8 @@ public class Gun : MonoBehaviour
     }
 
     [Header("---Weapon Settings---")]
+    public ActiveWeapon.WeaponSlot weaponSlot;
+    public AutoOrSemi autoOrSemi;
     public string weaponName;
     public float damage = 10f;
     public float range = 100f;
@@ -49,6 +55,7 @@ public class Gun : MonoBehaviour
     public int bulletsPerMag = 30;
     public int bulletsLeft = 90;
     public int currentBullets;
+    public GameObject magazine;
 
     // Basic magazine handling;
     // public int maxAmmo = 30;
@@ -64,6 +71,7 @@ public class Gun : MonoBehaviour
 
     [Header("---Recoil Settings---")]
     // Pattern recoil is a script which controlls the camera recoil
+    public Vector2[] pattern;
     public PatternRecoil patternRecoil;
 
     [Header("---Weapon Effects---")]
@@ -82,26 +90,28 @@ public class Gun : MonoBehaviour
     {
         patternRecoil = GetComponentInParent<PatternRecoil>();
         updateBullet(Time.deltaTime);
-        if(Input.GetKey(KeyCode.R) && currentBullets < 30)
-        {
-                startReload();
-        }
-        if (currentBullets <= 0)
-        {
-            if(Input.GetKey(KeyCode.R))
-            {
-                startReload();
-            }
-            return;
-        }
+        // if(Input.GetKey(KeyCode.R) && currentBullets < 30)
+        // {
+        //         startReload();
+        // }
+        // if (currentBullets <= 0)
+        // {
+        //     if(Input.GetKey(KeyCode.R))
+        //     {
+        //         startReload();
+        //     }
+        //     return;
+        // }
     }
 
     public void fireBullet()
     {
+        if(currentBullets <= 0 ) return;
         currentBullets--;
         // shotSound.Play();
         muzzleFlash.Play();
         // emitShells();
+        patternRecoil.recoilPattern = pattern;
         patternRecoil.startRecoil(weaponName);
 
         Vector3 velocity = (rayCastDestination.position - rayCastOrigin.position).normalized * bulletSpeed;
@@ -157,7 +167,7 @@ public class Gun : MonoBehaviour
         bullets.RemoveAll(bullet => bullet.time >= bulletMaxLifeTime);
     }
 
-    private void startReload()
+    public void startReload()
     {
         if(bulletsLeft <= 0) return;
 

@@ -46,6 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78fb8edfe3cbce439b81906aa0eae86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponSlot: 0
+  autoOrSemi: 0
   weaponName: m4_test
   damage: 10
   range: 100
@@ -58,14 +60,32 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   weaponHolder: {fileID: 0}
-  bulletsPerMag: 1000
+  bulletsPerMag: 30
   bulletsLeft: 90
   currentBullets: 0
+  magazine: {fileID: 0}
   fpsCam: {fileID: 0}
   rayCastOrigin: {fileID: 4726680219775416353}
   rayCastDestination: {fileID: 0}
+  pattern:
+  - {x: 1, y: 1}
+  - {x: 0.7, y: 1}
+  - {x: 0.5, y: 1}
+  - {x: 0.2, y: 1}
+  - {x: 0, y: 1}
+  - {x: -0.2, y: 1}
+  - {x: -0.5, y: 1}
+  - {x: -0.7, y: 1}
+  - {x: -1, y: 1}
+  - {x: -0.7, y: 1}
+  - {x: -0.5, y: 1}
+  - {x: -0.2, y: 1}
+  - {x: 0, y: 1}
+  - {x: 0.2, y: 1}
+  - {x: 0.5, y: 1}
   patternRecoil: {fileID: 0}
   wallHitPrefab: {fileID: 8648452224871667186, guid: 2c95d3b70f10f684795940bf068468a4, type: 3}
+  shotSound: {fileID: 0}
   muzzleFlash: {fileID: 5240304508445186502}
   tracerEffect: {fileID: 1546344908249765889, guid: 51d3304d7a7e2444c982afe02b81c935, type: 3}
 --- !u!1 &3612122757325199439

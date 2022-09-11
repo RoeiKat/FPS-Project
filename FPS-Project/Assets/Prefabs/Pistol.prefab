@@ -9861,6 +9861,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c78fb8edfe3cbce439b81906aa0eae86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponSlot: 1
+  autoOrSemi: 1
   weaponName: pistol
   damage: 5
   range: 100
@@ -9873,14 +9875,18 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   weaponHolder: {fileID: 0}
-  bulletsPerMag: 1000
+  bulletsPerMag: 10
   bulletsLeft: 90
   currentBullets: 0
+  magazine: {fileID: 3716205319808701107}
   fpsCam: {fileID: 0}
   rayCastOrigin: {fileID: 638108419813564943}
   rayCastDestination: {fileID: 0}
+  pattern:
+  - {x: 0.5, y: 1}
   patternRecoil: {fileID: 0}
   wallHitPrefab: {fileID: 8648452224871667186, guid: 2c95d3b70f10f684795940bf068468a4, type: 3}
+  shotSound: {fileID: 0}
   muzzleFlash: {fileID: 3244258686048705039}
   tracerEffect: {fileID: 1546344908249765889, guid: 51d3304d7a7e2444c982afe02b81c935, type: 3}
 --- !u!1 &2332146022506494757
