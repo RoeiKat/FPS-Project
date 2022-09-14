@@ -199,6 +199,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1577592423376310064}
   - component: {fileID: 2211104001066341877}
+  - component: {fileID: 322309925}
   m_Layer: 7
   m_Name: Pistol
   m_TagString: Untagged
@@ -262,6 +263,25 @@ MonoBehaviour:
   shotSound: {fileID: 767182807568755064}
   muzzleFlash: {fileID: 3923004735412387169}
   tracerEffect: {fileID: 1546344908249765889, guid: 51d3304d7a7e2444c982afe02b81c935, type: 3}
+--- !u!95 &322309925
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2211104001066341770}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8130f08e1bfe3d544b9b33955fe41e8f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2421622212526240482
 GameObject:
   m_ObjectHideFlags: 0
@@ -975,6 +995,10 @@ PrefabInstance:
     - target: {fileID: 2256807496200470451, guid: 9bf6c8afa4a226f419238f707cc5eb1a, type: 3}
       propertyPath: looping
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2256807496200470451, guid: 9bf6c8afa4a226f419238f707cc5eb1a, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7116729337728783237, guid: 9bf6c8afa4a226f419238f707cc5eb1a, type: 3}
       propertyPath: m_Name

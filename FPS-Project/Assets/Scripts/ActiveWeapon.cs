@@ -12,9 +12,6 @@ public class ActiveWeapon : MonoBehaviour
     public Transform crossHairTarget;
     public Transform[] weaponSlots;
     public bool canShoot = false;
-    // public UnityEngine.Animations.Rigging.Rig handIK;
-    // public Transform weaponParent;
-
 
     Gun[] equipped_weapon = new Gun[2];
     int activeWeaponIndex;
@@ -117,9 +114,9 @@ public class ActiveWeapon : MonoBehaviour
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.transform.localPosition = Vector3.zero;
         weapon.transform.localRotation = Quaternion.identity;
-        weaponController.Play("equip_" + weapon.weaponName);
         equipped_weapon[weaponSlotIndex] = weapon;
         setActiveWeapon(newWeapon.weaponSlot);
+        weaponController.Play("equip_" + weapon.weaponName);
     }
 
 
@@ -139,33 +136,43 @@ public class ActiveWeapon : MonoBehaviour
         StartCoroutine(switchWeapon(holsterIndex, activateIndex));
     }
 
+    // IEnumerator switchWeapon(int holsterIndex)
     IEnumerator switchWeapon(int holsterIndex, int activateIndex)
     {
-        yield return StartCoroutine(holsterWeapon(holsterIndex));
-        yield return StartCoroutine(activateWeapon(activateIndex));
+        yield return StartCoroutine(holsterWeapon(holsterIndex, activateIndex));
+        // yield return StartCoroutine(holsterWeapon(holsterIndex);
+        // yield return StartCoroutine(activateWeapon(activateIndex));
         activeWeaponIndex = activateIndex;
     }
-    IEnumerator holsterWeapon(int index)
+        IEnumerator holsterWeapon(int index, int activateIndex)
     {
         var weapon = getWeapon(index);
         if (weapon) 
         {
             canShoot = false;
-            // weaponController.SetBool("holster_weapon", true);
             weapon.gameObject.SetActive(false);
-            yield return new WaitForSeconds(0);
-            do
-            {
-                yield return new WaitForEndOfFrame();
-            } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+            yield return StartCoroutine(activateWeapon(activateIndex));
         }
     }
+    // IEnumerator holsterWeapon(int index)
+    // {
+    //     var weapon = getWeapon(index);
+    //     if (weapon) 
+    //     {
+    //         canShoot = false;
+    //         weapon.gameObject.SetActive(false);
+    //         yield return new WaitForSeconds(0);
+    //         do
+    //         {
+    //             yield return new WaitForEndOfFrame();
+    //         } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+    //     }
+    // }
     IEnumerator activateWeapon(int index)
     {
         var weapon = getWeapon(index);
         if (weapon) 
         {
-            // weaponController.SetBool("holster_weapon", false);
             weapon.gameObject.SetActive(true);
             weaponController.Play("equip_" + weapon.weaponName);
             do
@@ -175,21 +182,4 @@ public class ActiveWeapon : MonoBehaviour
             canShoot = true;
         }
     }
-
-
-
-
-    // How to save functions to be activated inside the inspector
-    // [ContextMenu("Save weapon pose")]
-    // void saveWeaponPose()
-    // {
-    //     GameObjectRecorder recorder = new GameObjectRecorder(handsArmature.gameObject);
-    //     recorder.BindComponentsOfType<Transform>(weaponParent.gameObject, false);
-    //     recorder.BindComponentsOfType<Transform>(weapon.gameObject, false);
-    //     recorder.BindComponentsOfType<Transform>(weaponLeftGrip.gameObject, false);
-    //     recorder.BindComponentsOfType<Transform>(weaponRightGrip.gameObject, false);
-    //     recorder.TakeSnapshot(0.0f);
-    //     recorder.SaveToClip(weapon.weaponAnimation);
-    //     UnityEditor.AssetDatabase.SaveAssets();
-    // }
 }

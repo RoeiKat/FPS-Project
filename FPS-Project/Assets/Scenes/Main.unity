@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1829,10 +1829,6 @@ PrefabInstance:
       propertyPath: patternRecoil
       value: 
       objectReference: {fileID: 3214001294648329570}
-    - target: {fileID: 3923004735412387169, guid: 089f6d5e6e4f0404dbc7171c8da9abc3, type: 3}
-      propertyPath: looping
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 089f6d5e6e4f0404dbc7171c8da9abc3, type: 3}
 --- !u!4 &1238175314 stripped
@@ -3747,8 +3743,8 @@ MonoBehaviour:
   - {x: 0.2, y: 1}
   - {x: 0.5, y: 1}
   duration: 0.1
-  shakeDuration: 0
-  shakeMagnitude: 0
+  shakeDuration: 0.1
+  shakeMagnitude: 0.4
 --- !u!114 &3214001295640323319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6200,6 +6196,7 @@ MonoBehaviour:
   animationEvents: {fileID: 1647713625}
   activeWeapon: {fileID: 2628320123049526309}
   leftHand: {fileID: 6654860029129022085}
+  weaponAnimaton: {fileID: 0}
 --- !u!1 &8839823918917039365
 GameObject:
   m_ObjectHideFlags: 0
