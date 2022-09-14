@@ -77,7 +77,7 @@ public class Gun : MonoBehaviour
     [Header("---Weapon Effects---")]
     public GameObject wallHitPrefab;
     // public ParticleSystem shells;
-    // [SerializeField] AudioSource shotSound;
+    [SerializeField] AudioSource shotSound;
     public ParticleSystem muzzleFlash;
     public TrailRenderer tracerEffect;
     
@@ -108,7 +108,7 @@ public class Gun : MonoBehaviour
     {
         if(currentBullets <= 0 ) return;
         currentBullets--;
-        // shotSound.Play();
+        shotSound.Play();
         muzzleFlash.Play();
         // emitShells();
         patternRecoil.recoilPattern = pattern;

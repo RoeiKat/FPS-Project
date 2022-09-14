@@ -8,6 +8,7 @@ public class ReloadWeapon : MonoBehaviour
     public WeaponAnimationEvents animationEvents;
     public ActiveWeapon activeWeapon;
     public Transform leftHand;
+    public Animator weaponAnimaton;
 
     GameObject magazineHand;
 
@@ -23,9 +24,11 @@ public class ReloadWeapon : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.R))
         {
             Gun weapon = activeWeapon.getActiveWeapon();
+            weaponAnimaton = weapon.GetComponent<Animator>();
             if(weapon && weapon.currentBullets < weapon.bulletsPerMag)
             {
              weaponController.SetTrigger("reload_weapon");
+             weaponAnimaton.SetTrigger("reload");
             }
             else return; 
         }
@@ -57,9 +60,6 @@ public class ReloadWeapon : MonoBehaviour
     void DetachMagazine()
     {
         Gun weapon = activeWeapon.getActiveWeapon();
-        magazineHand = Instantiate(weapon.magazine, leftHand, true);
-        weapon.magazine.SetActive(false);
-
     }
     void AttachMagazine()
     {
