@@ -11,7 +11,7 @@ public class WeaponPickup : MonoBehaviour
         if(activeWeapon)
         {
             Gun newWeapon = Instantiate(weaponPrefab);
-            activeWeapon.Equip(newWeapon);
+            StartCoroutine(activeWeapon.Equip(newWeapon));
         }
     }
 }

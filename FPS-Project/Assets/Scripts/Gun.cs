@@ -57,13 +57,6 @@ public class Gun : MonoBehaviour
     public int currentBullets;
     public GameObject magazine;
 
-    // Basic magazine handling;
-    // public int maxAmmo = 30;
-    // public int currentAmmo;
-    // private bool isReloading = false;
-    // public float reloadTime = 5f;
-
-    public Camera fpsCam;
     Ray ray;
     RaycastHit hitInfo;
     public Transform rayCastOrigin;
@@ -77,38 +70,30 @@ public class Gun : MonoBehaviour
     [Header("---Weapon Effects---")]
     public GameObject wallHitPrefab;
     // public ParticleSystem shells;
-    [SerializeField] AudioSource shotSound;
+    public Animator weaponAnimaton;
+    public GameObject shotSound;
+    public AudioSource equipSound;
     public ParticleSystem muzzleFlash;
     public TrailRenderer tracerEffect;
     
+
     void Start()
     {
         currentBullets = bulletsPerMag;
+        weaponAnimaton = GetComponent<Animator>();
     }
 
     void Update()
     {
         patternRecoil = GetComponentInParent<PatternRecoil>();
         updateBullet(Time.deltaTime);
-        // if(Input.GetKey(KeyCode.R) && currentBullets < 30)
-        // {
-        //         startReload();
-        // }
-        // if (currentBullets <= 0)
-        // {
-        //     if(Input.GetKey(KeyCode.R))
-        //     {
-        //         startReload();
-        //     }
-        //     return;
-        // }
     }
 
     public void fireBullet()
     {
         if(currentBullets <= 0 ) return;
         currentBullets--;
-        shotSound.Play();
+        Instantiate(shotSound);
         muzzleFlash.Play();
         // emitShells();
         patternRecoil.recoilPattern = pattern;
@@ -162,7 +147,7 @@ public class Gun : MonoBehaviour
         }
     }
 
-    private void destroyBullets()
+    public void destroyBullets()
     {
         bullets.RemoveAll(bullet => bullet.time >= bulletMaxLifeTime);
     }
@@ -182,48 +167,9 @@ public class Gun : MonoBehaviour
     {
         // shells.Emit(1);
     }
+    
+    public void playAnim()
+    {
+        weaponAnimaton.Play(weaponName + "_equip");
+    }
 }
-
-    // IEnumerator Reload()
-    // {
-    //     isReloading = true;
-
-    //     yield return new WaitForSeconds(reloadTime);
-
-    //     isReloading = false;
-    //     currentAmmo = maxAmmo;
-    // }
-
-    // Old shooting mechanics (without bullet drop)
-    // void fireBullet()
-    // {
-        // currentBullets--;
-        // patternRecoil.startRecoil();
-        
-        // ray.origin = rayCastOrigin.position;
-        // ray.direction = rayCastDestination.position - rayCastOrigin.position;
-
-        // // var tracer = Instantiate(tracerEffect, ray.origin, Quaternion.identity);
-        // // tracer.AddPosition(ray.origin);
-        // muzzleFlash.Play();
-        // generateRecoil();
-        // emitShells();
-
-        // This function returns true or false, wether an object got hit or not.
-        // "out hit" stores all the info about the object that the ray interacted with in the variables
-
-        // if(Physics.Raycast(ray, out hitInfo, range))
-        // {
-        //     //Effects
-        //     GameObject hitVFX = Instantiate(wallHitPrefab, hitInfo.point, Quaternion.FromToRotation(Vector3.forward, hitInfo.normal));
-        //     hitVFX.transform.parent = hitInfo.transform;
-        //     tracer.transform.position = hitInfo.point;
-        //     //Damaging the target
-        //     Health targetHealth = hitInfo.transform.GetComponent<Health>();
-        //     if (targetHealth != null)
-        //     {
-        //         targetHealth.TakeDamage(damage);
-        //     }
-        // }
-        
-    // }

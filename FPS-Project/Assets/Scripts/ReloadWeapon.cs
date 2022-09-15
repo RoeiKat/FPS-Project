@@ -27,6 +27,10 @@ public class ReloadWeapon : MonoBehaviour
             weaponAnimaton = weapon.GetComponent<Animator>();
             if(weapon && weapon.currentBullets < weapon.bulletsPerMag)
             {
+                if(weapon.currentBullets == 0 && weapon.bulletsLeft == 0)
+                {
+                    return;
+                }
              weaponController.SetTrigger("reload_weapon");
              weaponAnimaton.SetTrigger("reload");
             }

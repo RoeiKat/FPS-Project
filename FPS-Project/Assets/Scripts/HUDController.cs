@@ -11,6 +11,7 @@ public class HUDController : MonoBehaviour
     private Gun playerGun;
 
     public TextMeshProUGUI ammoHUD;
+    public ActiveWeapon activeWeapon;
 
     public TextMeshProUGUI healthHUD;
     public Slider healthSlider;
@@ -23,7 +24,6 @@ public class HUDController : MonoBehaviour
 
     void Update()
     {
-        playerGun = player.GetComponentInChildren<Gun>();
         if(playerGun != null)
         {
          ammoHUD.text = (playerGun.currentBullets.ToString() + "/" + playerGun.bulletsLeft.ToString());
@@ -61,5 +61,10 @@ public class HUDController : MonoBehaviour
         {
             playerHealth.TakeDamage(10);
         }
+    }
+
+    public void updateGun(Gun gun)
+    {
+        playerGun = gun;
     }
 }

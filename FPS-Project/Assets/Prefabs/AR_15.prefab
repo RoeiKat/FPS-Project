@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &303830035369121537
+--- !u!1 &1103591611
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,40 +8,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4019428486379318224}
-  - component: {fileID: 6349764246233200330}
+  - component: {fileID: 1103591612}
+  - component: {fileID: 1103591613}
   m_Layer: 7
-  m_Name: ShotSound
+  m_Name: EquipSound
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4019428486379318224
+--- !u!4 &1103591612
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303830035369121537}
+  m_GameObject: {fileID: 1103591611}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 2862432112313391995}
+  m_Father: {fileID: 7382756888759536773}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &6349764246233200330
+--- !u!82 &1103591613
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 303830035369121537}
+  m_GameObject: {fileID: 1103591611}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 7e21181d06c3d1d4fbc279041a300788, type: 3}
+  m_audioClip: {fileID: 8300000, guid: 2f766c441e9890843924af47427e437f, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -244,8 +244,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.02532747, y: 0.08314436, z: 0.09056766}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4019428486379318224}
+  m_Children: []
   m_Father: {fileID: 7867106126072731233}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1032,7 +1031,8 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -0, y: 0.1203464, z: -0.10610909}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 1103591612}
   m_Father: {fileID: 7867106126072731233}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1423,6 +1423,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7867106126072731233}
   - component: {fileID: 7378659787433381080}
+  - component: {fileID: 1011146419}
   m_Layer: 7
   m_Name: AR_15
   m_TagString: Untagged
@@ -1472,7 +1473,7 @@ MonoBehaviour:
   range: 100
   bulletSpeed: 200
   bulletDrop: 10
-  fireRate: 8
+  fireRate: 7
   nextRoundToFire: 0.2
   bulletMaxLifeTime: 3
   playerLayer:
@@ -1483,7 +1484,6 @@ MonoBehaviour:
   bulletsLeft: 90
   currentBullets: 0
   magazine: {fileID: 5430133512423427042}
-  fpsCam: {fileID: 0}
   rayCastOrigin: {fileID: 8981307552958224129}
   rayCastDestination: {fileID: 0}
   pattern:
@@ -1504,9 +1504,29 @@ MonoBehaviour:
   - {x: 1, y: 1}
   patternRecoil: {fileID: 0}
   wallHitPrefab: {fileID: 8648452224871667186, guid: 2c95d3b70f10f684795940bf068468a4, type: 3}
-  shotSound: {fileID: 6349764246233200330}
+  shotSound: {fileID: 0}
+  equipSound: {fileID: 1103591613}
   muzzleFlash: {fileID: 7202885108119874164}
   tracerEffect: {fileID: 1546344908249765889, guid: 51d3304d7a7e2444c982afe02b81c935, type: 3}
+--- !u!95 &1011146419
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7378659787433381083}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ba08558dbeb3fc8449cb603299ec0dda, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8135291118697386495
 GameObject:
   m_ObjectHideFlags: 0

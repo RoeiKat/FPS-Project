@@ -12,19 +12,29 @@ public class ActiveWeapon : MonoBehaviour
     public Transform crossHairTarget;
     public Transform[] weaponSlots;
     public bool canShoot = false;
+    public HUDController hud;
 
     Gun[] equipped_weapon = new Gun[2];
     int activeWeaponIndex;
 
     public Animator weaponController;
+    public Animator weaponAnimaton;
+
+    public Camera fpsCam;
+    public Camera mainCamera;
+    private float cameraFOV;
+    public int cameraZoom;
+    public float zoomSpeed;
 
     void Start()
     {
         Gun existingWeapon = GetComponentInChildren<Gun>();
         if(existingWeapon)
         {
-            Equip(existingWeapon);
+            StartCoroutine(Equip(existingWeapon));
+            // Equip(existingWeapon);
         }
+        cameraFOV = fpsCam.fieldOfView;
     }
 
     public Gun getActiveWeapon()
@@ -39,6 +49,44 @@ public class ActiveWeapon : MonoBehaviour
             return null;
         }
         return equipped_weapon[index];
+    }
+
+    void Update()
+    {
+        var weapon = getWeapon(activeWeaponIndex);
+        if(weapon && canShoot)
+        {
+            if(Input.GetButton("Fire2"))
+            {
+                weaponController.SetBool("ads_weapon", true);
+                zoomCamera(fpsCam);
+                zoomCamera(mainCamera);
+            }
+            else 
+            {
+                weaponController.SetBool("ads_weapon", false);
+                unZoomCamera(fpsCam);
+                unZoomCamera(mainCamera);
+            }
+            int weaponKind = (int)weapon.autoOrSemi;
+            if(weaponKind == 0)
+            {
+                automaticShoot(weapon);
+            }
+            if(weaponKind == 1)
+            {
+                semiAutoShoot(weapon);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1) && canShoot)
+        {
+            setActiveWeapon(WeaponSlot.Primary);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2) && canShoot)
+        {
+            setActiveWeapon(WeaponSlot.Secondary);
+        }
     }
 
     private void semiAutoShoot(Gun weapon)
@@ -67,49 +115,17 @@ public class ActiveWeapon : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        var weapon = getWeapon(activeWeaponIndex);
-        if(weapon && canShoot)
-        {
-            int weaponKind = (int)weapon.autoOrSemi;
-            if(weaponKind == 0)
-            {
-                automaticShoot(weapon);
-            }
-            if(weaponKind == 1)
-            {
-                semiAutoShoot(weapon);
-            }
-        }
-        else
-        {
-            canShoot = false;
-        }
-
-
-        if (Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            setActiveWeapon(WeaponSlot.Primary);
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            setActiveWeapon(WeaponSlot.Secondary);
-        }
-    }
-
-    public void Equip(Gun newWeapon)
+    public IEnumerator Equip(Gun newWeapon)
     {
         int weaponSlotIndex = (int)newWeapon.weaponSlot;
         var weapon = getWeapon(weaponSlotIndex);
         if(weapon)
         {
             Destroy(newWeapon.gameObject);
-            return;
+            yield break;
             // Destroy(weapon.gameObject);
         }
         weapon = newWeapon;
-        canShoot = true;
         weapon.rayCastDestination = crossHairTarget;
         weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
         weapon.transform.localPosition = Vector3.zero;
@@ -117,12 +133,41 @@ public class ActiveWeapon : MonoBehaviour
         equipped_weapon[weaponSlotIndex] = weapon;
         setActiveWeapon(newWeapon.weaponSlot);
         weaponController.Play("equip_" + weapon.weaponName);
+        weapon.equipSound.Play();
+        do
+        {
+         yield return new WaitForEndOfFrame();
+        } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        canShoot = true;
     }
+
+    // public void Equip(Gun newWeapon)
+    // {
+    //     int weaponSlotIndex = (int)newWeapon.weaponSlot;
+    //     var weapon = getWeapon(weaponSlotIndex);
+    //     if(weapon)
+    //     {
+    //         Destroy(newWeapon.gameObject);
+    //         return;
+    //         // Destroy(weapon.gameObject);
+    //     }
+    //     weapon = newWeapon;
+    //     canShoot = true;
+    //     weapon.rayCastDestination = crossHairTarget;
+    //     weapon.transform.SetParent(weaponSlots[weaponSlotIndex], false);
+    //     weapon.transform.localPosition = Vector3.zero;
+    //     weapon.transform.localRotation = Quaternion.identity;
+    //     equipped_weapon[weaponSlotIndex] = weapon;
+    //     setActiveWeapon(newWeapon.weaponSlot);
+    //     weaponController.Play("equip_" + weapon.weaponName);
+    //     weapon.equipSound.Play();
+    // }
 
 
     void setActiveWeapon(WeaponSlot weaponSlot)
     {
         var weapon = getWeapon((int)weaponSlot);
+        hud.updateGun(weapon);
         if(weapon == null)
         {
             return;
@@ -140,8 +185,6 @@ public class ActiveWeapon : MonoBehaviour
     IEnumerator switchWeapon(int holsterIndex, int activateIndex)
     {
         yield return StartCoroutine(holsterWeapon(holsterIndex, activateIndex));
-        // yield return StartCoroutine(holsterWeapon(holsterIndex);
-        // yield return StartCoroutine(activateWeapon(activateIndex));
         activeWeaponIndex = activateIndex;
     }
         IEnumerator holsterWeapon(int index, int activateIndex)
@@ -149,37 +192,37 @@ public class ActiveWeapon : MonoBehaviour
         var weapon = getWeapon(index);
         if (weapon) 
         {
+            hud.updateGun(weapon);
             canShoot = false;
-            weapon.gameObject.SetActive(false);
+            GameObject weaponMesh = weapon.transform.GetChild(0).gameObject;
+            weaponMesh.gameObject.SetActive(false);
             yield return StartCoroutine(activateWeapon(activateIndex));
         }
     }
-    // IEnumerator holsterWeapon(int index)
-    // {
-    //     var weapon = getWeapon(index);
-    //     if (weapon) 
-    //     {
-    //         canShoot = false;
-    //         weapon.gameObject.SetActive(false);
-    //         yield return new WaitForSeconds(0);
-    //         do
-    //         {
-    //             yield return new WaitForEndOfFrame();
-    //         } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
-    //     }
-    // }
     IEnumerator activateWeapon(int index)
     {
         var weapon = getWeapon(index);
         if (weapon) 
         {
-            weapon.gameObject.SetActive(true);
+            hud.updateGun(weapon);
+            GameObject weaponMesh = weapon.transform.GetChild(0).gameObject;
+            weaponMesh.gameObject.SetActive(true);
             weaponController.Play("equip_" + weapon.weaponName);
+            weapon.equipSound.Play();
             do
             {
                 yield return new WaitForEndOfFrame();
             } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
             canShoot = true;
         }
+    }
+
+    private void zoomCamera(Camera camera)
+    {
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, cameraZoom, zoomSpeed * Time.deltaTime);
+    }
+    private void unZoomCamera(Camera camera)
+    {
+        camera.fieldOfView = Mathf.Lerp(camera.fieldOfView, cameraFOV, zoomSpeed * Time.deltaTime);
     }
 }
