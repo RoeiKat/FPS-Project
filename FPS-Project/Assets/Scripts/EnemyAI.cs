@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyAI : MonoBehaviour
 {
-    NavMeshAgent navMeshAgent;
+    public NavMeshAgent navMeshAgent;
     public Transform target;
     [SerializeField] float turnSpeed;
     Animator animator;
@@ -14,13 +14,20 @@ public class EnemyAI : MonoBehaviour
     public float chaseRange = 10f;
     float distanceToTarget = Mathf.Infinity;
     public bool isProvoked = false;
+    public bool stopMovement = false;
+    public bool isAttacking = false;
     public bool startScream = false;
     public Transform hitCheck;
+
+    [Header("Sounds")]
+    public AudioSource sfx;
+    public AudioClip idleSound, attackSound, screamSound;
 
     void Start()
     {
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
+        sfx.Play();
     }
 
     void Update()
@@ -50,11 +57,17 @@ public class EnemyAI : MonoBehaviour
         faceTarget();
         if(distanceToTarget >= navMeshAgent.stoppingDistance)
         {
-            chaseTarget();
+            if(!isAttacking && !stopMovement)
+            {
+             chaseTarget();
+            }
         }   
         if(distanceToTarget <= navMeshAgent.stoppingDistance)
         {
-            attackTarget();
+            if(!isAttacking)
+            {
+                StartCoroutine(attackTarget());
+            }
         }
         else
         {
@@ -77,15 +90,37 @@ public class EnemyAI : MonoBehaviour
     
     private void chaseTarget()
     {
+        if(sfx.clip != screamSound)
+        {
+            sfx.clip = screamSound;
+            sfx.Play();
+        }
         navMeshAgent.SetDestination(target.position);
         hitCheck.GetComponent<HitHandler>().enabled = false;
     }
     
-    private void attackTarget()
+    // private void attackTarget()
+    // {
+    //     Debug.Log("Attacking the player");
+    //     animator.SetBool("attack", true);
+    //     hitCheck.GetComponent<HitHandler>().enabled = true;
+    // }
+
+    IEnumerator attackTarget()
     {
-        Debug.Log("Attacking the player");
-        animator.SetBool("attack", true);
+        isAttacking = true;
+        stopMovement = true;
+        sfx.clip = attackSound;
+        sfx.Play();
+        animator.SetBool("attack",true);
         hitCheck.GetComponent<HitHandler>().enabled = true;
+        do
+        {
+            yield return new WaitForEndOfFrame();
+        } 
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        isAttacking = false;
+        stopMovement = false;
     }
 
     private void faceTarget()
@@ -96,14 +131,20 @@ public class EnemyAI : MonoBehaviour
     }
 
     IEnumerator zombieScream()
-    {
+    { 
+        startScream = false;
+        stopMovement = true;
+        Debug.Log("Screaming");
+        sfx.clip = screamSound;
+        sfx.Play();
         animator.SetBool("scream", true);
         do
         {
             yield return new WaitForEndOfFrame();
-        } while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        } 
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
         animator.SetBool("scream", false);
-        startScream = false;
+        stopMovement = false;
         engageTarget();
     }
 
