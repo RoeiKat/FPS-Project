@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class HitHandler : MonoBehaviour
 {
-    public float dmg = 10f;
+    public EnemyAI enemyAI;
     private void OnTriggerEnter(Collider other)
     {
         Health health = other.gameObject.GetComponent<Health>();
         if(health)
         {
-            health.TakeDamage(dmg);
+            health.TakeDamage(enemyAI.dmg);
         }
     }
 }

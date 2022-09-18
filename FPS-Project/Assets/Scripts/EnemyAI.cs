@@ -9,6 +9,7 @@ public class EnemyAI : MonoBehaviour
     public Transform target;
     [SerializeField] float turnSpeed;
     Animator animator;
+    public float dmg = 10f;
 
 
     public float chaseRange = 10f;

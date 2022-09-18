@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    public GameObject player;
     public float health = 100f;
     public float destroyTimer = 10f;
     public float crawlHealth = 20f;
@@ -31,8 +32,8 @@ public class EnemyHealth : MonoBehaviour
     void die()
     {
         isDead = true;
-        int randomDeath = Random.Range(2,2);
-        int randomCrawl = Random.Range(1,1);
+        int randomDeath = Random.Range(1,2);
+        int randomCrawl = Random.Range(1,2);
         if(isDead)
         {
             if(randomCrawl == 1 && randomDeath == 2 && !hasCrawled)
@@ -42,10 +43,10 @@ public class EnemyHealth : MonoBehaviour
             }
         if(hasCrawled)
         {
-            animator.StopPlayback();
             enemyAI.enabled = false;
             enemyAI.sfx.Stop();
             Destroy(gameObject, destroyTimer);
+            animator.SetTrigger("dead");
             return;
         }
         animator.Play("zombie_death" + randomDeath);
@@ -56,21 +57,28 @@ public class EnemyHealth : MonoBehaviour
     }
     IEnumerator startCrawl()
     {
-        enemyAI.enabled = true;
-        enemyAI.stopMovement = true;
-        hasCrawled = true;
-        isDead = false;
-        health  = crawlHealth;
         animator.Play("zombie_death2");
         do
         {
             yield return new WaitForEndOfFrame();
         } 
         while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        enemyAI.enabled = true;
+        enemyAI.stopMovement = true;
+        hasCrawled = true;
+        isDead = false;
+        health  = crawlHealth;
         enemyAI.navMeshAgent.speed = 1f;
         animator.SetTrigger("crawl");
         enemyAI.stopMovement = false;
         enemyAI.sfx.clip = enemyAI.screamSound;
         enemyAI.sfx.Play();
+    }
+    
+    public void dealDamage(float dmg)
+    {
+        dmg = enemyAI.dmg;
+        Health playerHealth = player.GetComponent<Health>();
+        playerHealth.TakeDamage(dmg);
     }
 }
