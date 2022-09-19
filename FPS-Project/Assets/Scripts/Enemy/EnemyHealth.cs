@@ -8,6 +8,7 @@ public class EnemyHealth : MonoBehaviour
     public float health = 100f;
     public float destroyTimer = 10f;
     public float crawlHealth = 20f;
+    public bool crawlingZombie = false;
     private bool hasCrawled = false;
     public bool isDead = false;    
     EnemyAI enemyAI;
@@ -34,29 +35,47 @@ public class EnemyHealth : MonoBehaviour
         isDead = true;
         int randomDeath = Random.Range(1,2);
         int randomCrawl = Random.Range(1,2);
+        if (randomCrawl == 2 ) crawlingZombie = true;
         if(isDead)
         {
-            if(randomCrawl == 1 && randomDeath == 2 && !hasCrawled)
+            if(crawlingZombie && randomDeath == 2 && !hasCrawled)
             {
-                StartCoroutine(startCrawl());
+                    StartCoroutine(startCrawl());
+                    return;
+            }
+            if(hasCrawled)
+            {
+                enemyAI.enabled = false;
+                enemyAI.sfx.Stop();
+                Destroy(gameObject, destroyTimer);
+                animator.SetTrigger("dead");
                 return;
             }
-        if(hasCrawled)
-        {
-            enemyAI.enabled = false;
-            enemyAI.sfx.Stop();
-            Destroy(gameObject, destroyTimer);
-            animator.SetTrigger("dead");
-            return;
-        }
-        animator.Play("zombie_death" + randomDeath);
-        enemyAI.enabled = false;
-        enemyAI.sfx.Stop();
-        Destroy(gameObject, destroyTimer);
+            else
+            {
+                StartCoroutine(deathAnimationHandler(randomDeath));
+            }
         }
     }
+    IEnumerator deathAnimationHandler(int deathIndex)
+    {
+        enemyAI.enabled = false;
+        enemyAI.stopMovement = true;
+        enemyAI.navMeshAgent.speed = 0f;
+        enemyAI.sfx.Stop();
+        animator.Play("zombie_death" + deathIndex);
+        do
+        {
+            yield return new WaitForEndOfFrame();
+        } 
+        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        Destroy(gameObject, destroyTimer);
+    }
+
+
     IEnumerator startCrawl()
     {
+        enemyAI.enabled = false;
         animator.Play("zombie_death2");
         do
         {
