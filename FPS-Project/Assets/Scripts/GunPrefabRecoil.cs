@@ -4,39 +4,41 @@ using UnityEngine;
 
 public class GunPrefabRecoil : MonoBehaviour
 {
-    Vector3 currentRotation, targetRotation, targetPosition, currentPosition, initialGunPosition ;
+    private Vector3 currentRotation, targetRotation;
     // public Transform cam;
 
-    [SerializeField] float recoilX;    
-    [SerializeField] float recoilY;    
-    [SerializeField] float recoilZ;    
+    public float recoilX;    
+    public float recoilY;    
+    public float recoilZ; 
 
-    [SerializeField] float kickBackZ;
+    public float lowerWhileAds = 1.5f;
+    ActiveWeapon activeWeapon;
 
     public float snappiness;
-    public float returnAmount;
-    
+    public float returnSpeed;
 
-    // Update is called once per frame
+    void Start()
+    {
+        activeWeapon = GetComponentInParent<ActiveWeapon>();
+    }
+
+    void Update()
+    {
+        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, returnSpeed * Time.deltaTime);
+        currentRotation = Vector3.Slerp(currentRotation, targetRotation, snappiness * Time.deltaTime);
+        transform.localRotation = Quaternion.Euler(currentRotation);
+    }
+    
     public void generateRecoil()
     {
-        initialGunPosition = transform.localPosition;
-        recoil();
-        targetRotation = Vector3.Lerp(targetRotation, Vector3.zero, Time.deltaTime * returnAmount);
-        currentRotation = Vector3.Slerp(currentRotation, targetRotation, Time.fixedDeltaTime * snappiness);
-        transform.localRotation = Quaternion.Euler(currentRotation);
-        // cam.localRotation = Quaternion.Euler(currentRotation); Add this line for controlling the cam with the weapon
-        back();
-    }
-    public void recoil()
-    {
-        targetPosition -= new Vector3(0,0,kickBackZ);
+        if(!activeWeapon.adsWeapon)
+        {
         targetRotation += new Vector3(recoilX, Random.Range(-recoilY, recoilY), Random.Range(-recoilZ, recoilZ));
+        }
+        if(activeWeapon.adsWeapon)
+        {
+        targetRotation += new Vector3(recoilX / lowerWhileAds, Random.Range(-recoilY / lowerWhileAds, recoilY * lowerWhileAds), Random.Range(-recoilZ / lowerWhileAds, recoilZ / lowerWhileAds));
+        }
     }
-    void back()
-    {
-        targetPosition = Vector3.Lerp(targetPosition, initialGunPosition, Time.deltaTime * returnAmount);
-        currentPosition = Vector3.Lerp(currentPosition, targetPosition, Time.fixedDeltaTime * snappiness);
-        transform.localPosition = currentPosition;
-    }
+
 }

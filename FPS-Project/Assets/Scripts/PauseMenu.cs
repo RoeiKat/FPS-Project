@@ -10,6 +10,8 @@ public class PauseMenu : MonoBehaviour
     public AudioMixer audioMixer;
     public GameObject pauseMenuUI;
     private float currentAudioSet;
+    public ActiveWeapon activeWeapon;
+    
 
     void Update()
     {
@@ -28,20 +30,29 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume()
     {
-        audioMixer.SetFloat("masterVolume", currentAudioSet);
+        Cursor.lockState = CursorLockMode.Locked;
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
         gamePause = false;
+        Gun weapon = activeWeapon.getActiveWeapon();
+        if( weapon != null )
+        {
+            activeWeapon.canShoot = true;
+        }
+        AudioListener.pause = false;
     }
 
     void Pause()
     {
-        audioMixer.GetFloat("masterVolume", out float value);
-        currentAudioSet = value;
-        audioMixer.SetFloat("masterVolume", -80);
+        Cursor.lockState = CursorLockMode.Confined;
         pauseMenuUI.SetActive(true);
         Time.timeScale = 0f;
         gamePause = true;
+        if(activeWeapon.canShoot)
+        {
+        activeWeapon.canShoot = false;
+        }
+        AudioListener.pause = true;
     }
 
     public void loadMainMenu()

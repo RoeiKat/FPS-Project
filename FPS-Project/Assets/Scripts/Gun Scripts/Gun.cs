@@ -66,6 +66,13 @@ public class Gun : MonoBehaviour
     // Pattern recoil is a script which controlls the camera recoil
     public Vector2[] pattern;
     public PatternRecoil patternRecoil;
+    public float recoilX;
+    public float recoilY;
+    public float recoilZ;
+    public float snappiness;
+    public float returnSpeed;
+
+    public GunPrefabRecoil prefabRecoil;
 
     [Header("---Weapon Effects---")]
     public GameObject wallHitPrefab;
@@ -87,12 +94,14 @@ public class Gun : MonoBehaviour
     {
         patternRecoil = GetComponentInParent<PatternRecoil>();
         updateBullet(Time.deltaTime);
+
     }
 
     public void fireBullet()
     {
         if(currentBullets <= 0 ) return;
         currentBullets--;
+        prefabRecoil.generateRecoil();
         Instantiate(shotSound, Vector3.zero, Quaternion.identity, this.gameObject.transform);
         muzzleFlash.Play();
         // emitShells();
@@ -168,8 +177,12 @@ public class Gun : MonoBehaviour
         // shells.Emit(1);
     }
     
-    public void playAnim()
+    public void setPrefabRecoilStats()
     {
-        weaponAnimaton.Play(weaponName + "_equip");
+        prefabRecoil.recoilX = recoilX;
+        prefabRecoil.recoilY = recoilY;
+        prefabRecoil.recoilZ = recoilZ;
+        prefabRecoil.snappiness =  snappiness;
+        prefabRecoil.returnSpeed = returnSpeed;
     }
 }

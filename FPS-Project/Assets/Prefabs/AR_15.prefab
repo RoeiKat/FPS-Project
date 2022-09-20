@@ -1503,7 +1503,12 @@ MonoBehaviour:
   - {x: 1, y: 1}
   - {x: 1, y: 1}
   patternRecoil: {fileID: 0}
+  kickBack: 4
+  x: 0
+  y: 0
+  z: 1
   wallHitPrefab: {fileID: 8648452224871667186, guid: 2c95d3b70f10f684795940bf068468a4, type: 3}
+  weaponAnimaton: {fileID: 0}
   shotSound: {fileID: 0}
   equipSound: {fileID: 1103591613}
   muzzleFlash: {fileID: 7202885108119874164}

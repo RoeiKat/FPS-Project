@@ -6,16 +6,26 @@ public class PlayerMovement : MonoBehaviour
 {
     public CharacterController controller;
 
-    public float speed = 12f;
+    public float speed = 6f;
+    public float normalSpeed = 6f;
+    public float sprintSpeed = 12f;
+    public bool isSprinting = false;
     public float gravity = -19.81f;
     public float jumpHeight = 3f;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
+    public Animator weaponController;
+    ActiveWeapon activeWeapon;
 
     bool isGrounded;
     Vector3 velocity;
+
+    void Start()
+    {
+        activeWeapon = GetComponent<ActiveWeapon>();
+    }
 
     // Update is called once per frame
     void Update()
@@ -45,12 +55,29 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Running code
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift))
         {
-        } 
-        if (Input.GetKeyUp(KeyCode.LeftShift))
-        {
+            speed = sprintSpeed;
+            StartCoroutine(sprintingHandler());
         }
+        else
+        {
+            isSprinting = false;
+            speed = normalSpeed;
+            weaponController.SetBool("isSprinting", false);
+        } 
+
+        IEnumerator sprintingHandler()
+        {
+        isSprinting = true;
+        activeWeapon.canShoot = false;
+        weaponController.SetBool("isSprinting", true);
+        do
+        {
+         yield return new WaitForEndOfFrame();
+        } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        }
+        activeWeapon.canShoot = true;
         
         // Gravity applier
         velocity.y += gravity * Time.deltaTime;

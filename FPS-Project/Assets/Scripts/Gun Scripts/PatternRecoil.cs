@@ -47,7 +47,7 @@ public class PatternRecoil : MonoBehaviour
         verticalRecoil = recoilPattern[index].y;
 
         index = nextIndex(index);
-        weaponController.Play("recoil_" + weaponName, 1, 0f);
+        // weaponController.Play("recoil_" + weaponName, 1, 0f);
     }
     
     int nextIndex(int index)
