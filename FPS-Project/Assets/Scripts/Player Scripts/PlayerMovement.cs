@@ -19,12 +19,17 @@ public class PlayerMovement : MonoBehaviour
     public Animator weaponController;
     ActiveWeapon activeWeapon;
 
+    AudioSource sfx;
+    public AudioClip[] audioClips;
+
     bool isGrounded;
     Vector3 velocity;
 
     void Start()
     {
+        sfx = GetComponent<AudioSource>();
         activeWeapon = GetComponent<ActiveWeapon>();
+        sfx.enabled = false;
     }
 
     // Update is called once per frame
@@ -48,6 +53,15 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
     
+        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        {
+            sfx.clip = audioClips[0];
+            sfx.enabled = true;
+        } else 
+        {
+            sfx.enabled = false;
+        }
+
         // Jumping code
         if(Input.GetButtonDown("Jump") && isGrounded)
         {
