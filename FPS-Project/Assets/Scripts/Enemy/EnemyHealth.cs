@@ -33,8 +33,8 @@ public class EnemyHealth : MonoBehaviour
     void die()
     {
         isDead = true;
-        int randomDeath = Random.Range(1,2);
-        int randomCrawl = Random.Range(1,2);
+        int randomDeath = Random.Range(2,2);
+        int randomCrawl = Random.Range(2,2);
         if (randomCrawl == 2 ) crawlingZombie = true;
         if(isDead)
         {
@@ -76,6 +76,7 @@ public class EnemyHealth : MonoBehaviour
     IEnumerator startCrawl()
     {
         enemyAI.enabled = false;
+        enemyAI.sfx.Stop();
         animator.Play("zombie_death2");
         do
         {
