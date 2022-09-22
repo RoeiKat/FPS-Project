@@ -100,12 +100,6 @@ public class EnemyAI : MonoBehaviour
         hitCheck.GetComponent<HitHandler>().enabled = false;
     }
     
-    // private void attackTarget()
-    // {
-    //     Debug.Log("Attacking the player");
-    //     animator.SetBool("attack", true);
-    //     hitCheck.GetComponent<HitHandler>().enabled = true;
-    // }
 
     IEnumerator attackTarget()
     {
@@ -152,6 +146,6 @@ public class EnemyAI : MonoBehaviour
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawSphere(transform.position,chaseRange);
+        Gizmos.DrawWireSphere(transform.position,chaseRange);
     }
 }

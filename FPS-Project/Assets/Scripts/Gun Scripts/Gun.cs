@@ -145,8 +145,22 @@ public class Gun : MonoBehaviour
             bullet.tracer.transform.position = hitInfo.point;
             //Damaging the target
             EnemyHealth targetHealth = hitInfo.transform.GetComponent<EnemyHealth>();
+            if (hitInfo.transform.name == "Enemy")
+            {
+                Destroy(hitVFX);
+            }
+            if (hitInfo.transform.name == "HitCheck" || hitInfo.transform.name == "HitCheckHead")
+            {
+                targetHealth = hitInfo.transform.GetComponentInParent<EnemyHealth>();
+                Destroy(hitVFX);
+            }
             if (targetHealth != null)
             {
+                if (hitInfo.transform.name == "HitCheckHead")
+                {
+                    targetHealth.TakeDamage(damage * 2);
+                    return;
+                }
                 targetHealth.TakeDamage(damage);
             }
         }
@@ -172,10 +186,10 @@ public class Gun : MonoBehaviour
         currentBullets += bulletsToDeduct;
     }
 
-    void emitShells()
-    {
-        // shells.Emit(1);
-    }
+    // void emitShells()
+    // {
+    //     shells.Emit(1);
+    // }
     
     public void setPrefabRecoilStats()
     {

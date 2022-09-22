@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 6f;
     public float normalSpeed = 6f;
     public float sprintSpeed = 12f;
+    public bool canSprint = true;
     public bool isSprinting = false;
     public float gravity = -19.81f;
     public float jumpHeight = 3f;
@@ -29,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
     {
         sfx = GetComponent<AudioSource>();
         activeWeapon = GetComponent<ActiveWeapon>();
+        sfx.clip = audioClips[0];
         sfx.enabled = false;
     }
 
@@ -53,9 +55,17 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
     
-        if(Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        if(Input.GetKey(KeyCode.W) && isGrounded || Input.GetKey(KeyCode.A) && isGrounded || Input.GetKey(KeyCode.S) && isGrounded || Input.GetKey(KeyCode.D) && isGrounded)
         {
-            sfx.clip = audioClips[0];
+            if(Input.GetKeyDown(KeyCode.LeftShift))
+            {
+                sfx.clip = audioClips[1];
+                sfx.Play();
+            } 
+            if(Input.GetKeyUp(KeyCode.LeftShift)){
+                sfx.clip = audioClips[0];
+                sfx.Play();
+            }
             sfx.enabled = true;
         } else 
         {
@@ -69,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // Running code
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && isGrounded && canSprint)
         {
             speed = sprintSpeed;
             StartCoroutine(sprintingHandler());
@@ -79,22 +89,20 @@ public class PlayerMovement : MonoBehaviour
             isSprinting = false;
             speed = normalSpeed;
             weaponController.SetBool("isSprinting", false);
-        } 
+        }
 
         IEnumerator sprintingHandler()
         {
         isSprinting = true;
         activeWeapon.canShoot = false;
         weaponController.SetBool("isSprinting", true);
-        do
-        {
-         yield return new WaitForEndOfFrame();
-        } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
-        }
+        yield return new WaitForSeconds(0.5f);
         activeWeapon.canShoot = true;
-        
+        }
         // Gravity applier
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+    
     }
 }

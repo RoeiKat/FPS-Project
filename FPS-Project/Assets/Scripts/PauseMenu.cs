@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool gamePause = false;
+    public bool gamePause = false;
     public AudioMixer audioMixer;
     public GameObject pauseMenuUI;
     private float currentAudioSet;

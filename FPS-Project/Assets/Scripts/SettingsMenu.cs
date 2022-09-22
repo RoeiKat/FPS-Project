@@ -8,12 +8,16 @@ public class SettingsMenu : MonoBehaviour
 {
     public AudioMixer audioMixer;
 
+    public MouseLook mouseLook;
+    public Slider mouseSensSlider;
+
     public TMPro.TMP_Dropdown resolutionDropdown;
 
     Resolution[] resolutions;
 
     void Start()
     {
+        mouseSensSlider.value = mouseLook.mouseSens;
         resolutions = Screen.resolutions;
 
         resolutionDropdown.ClearOptions();
@@ -35,6 +39,11 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
+    }
+
+    public void setMouseSens (float mouseSens)
+    {
+        mouseLook.mouseSens = mouseSens;
     }
 
     public void setResolution (int resolutionIndex)

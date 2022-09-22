@@ -28,6 +28,7 @@ public class ActiveWeapon : MonoBehaviour
     public float zoomSpeed;
 
     PlayerMovement playerMovement;
+    public PauseMenu pauseMenu;
 
     void Start()
     {
@@ -58,7 +59,7 @@ public class ActiveWeapon : MonoBehaviour
     void Update()
     {
         var weapon = getWeapon(activeWeaponIndex);
-        if(weapon && canShoot && !playerMovement.isSprinting)
+        if(weapon && canShoot && !playerMovement.isSprinting && !pauseMenu.gamePause)
         {
             if(Input.GetButton("Fire2"))
             {
@@ -141,11 +142,13 @@ public class ActiveWeapon : MonoBehaviour
         setActiveWeapon(newWeapon.weaponSlot);
         weaponController.Play("equip_" + weapon.weaponName);
         weapon.equipSound.Play();
+        playerMovement.canSprint = false;
         do
         {
          yield return new WaitForEndOfFrame();
         } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
         canShoot = true;
+        playerMovement.canSprint = true;
     }
 
     void setActiveWeapon(WeaponSlot weaponSlot)
@@ -193,11 +196,13 @@ public class ActiveWeapon : MonoBehaviour
             weaponMesh.gameObject.SetActive(true);
             weaponController.Play("equip_" + weapon.weaponName);
             weapon.equipSound.Play();
+            playerMovement.canSprint = false;
             do
             {
                 yield return new WaitForEndOfFrame();
             } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
             canShoot = true;
+            playerMovement.canSprint = true;
         }
     }
 

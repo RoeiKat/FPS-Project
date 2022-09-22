@@ -8,7 +8,7 @@ public class HitHandler : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Health health = other.gameObject.GetComponent<Health>();
-        if(health)
+        if(health && enemyAI.enabled == true)
         {
             health.TakeDamage(enemyAI.dmg);
         }

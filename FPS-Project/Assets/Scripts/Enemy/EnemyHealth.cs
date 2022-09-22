@@ -8,7 +8,9 @@ public class EnemyHealth : MonoBehaviour
     public float health = 100f;
     public float destroyTimer = 10f;
     public float crawlHealth = 20f;
+    public int randomDeath;
     public bool crawlingZombie = false;
+    public float timeTillCrawl = 3f;
     private bool hasCrawled = false;
     public bool isDead = false;    
     EnemyAI enemyAI;
@@ -33,18 +35,19 @@ public class EnemyHealth : MonoBehaviour
     void die()
     {
         isDead = true;
-        int randomDeath = Random.Range(2,2);
-        int randomCrawl = Random.Range(2,2);
-        if (randomCrawl == 2 ) crawlingZombie = true;
         if(isDead)
         {
-            if(crawlingZombie && randomDeath == 2 && !hasCrawled)
+            enemyAI.stopMovement = true;
+            enemyAI.navMeshAgent.speed = 0f;
+            if(crawlingZombie && !hasCrawled)
             {
+                    randomDeath = 2;
                     StartCoroutine(startCrawl());
                     return;
             }
             if(hasCrawled)
             {
+                
                 enemyAI.enabled = false;
                 enemyAI.sfx.Stop();
                 Destroy(gameObject, destroyTimer);
@@ -60,8 +63,6 @@ public class EnemyHealth : MonoBehaviour
     IEnumerator deathAnimationHandler(int deathIndex)
     {
         enemyAI.enabled = false;
-        enemyAI.stopMovement = true;
-        enemyAI.navMeshAgent.speed = 0f;
         enemyAI.sfx.Stop();
         animator.Play("zombie_death" + deathIndex);
         do
@@ -78,13 +79,13 @@ public class EnemyHealth : MonoBehaviour
         enemyAI.enabled = false;
         enemyAI.sfx.Stop();
         animator.Play("zombie_death2");
-        do
-        {
-            yield return new WaitForEndOfFrame();
-        } 
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        yield return new WaitForSeconds(timeTillCrawl);
+        // do
+        // {
+        //     yield return new WaitForEndOfFrame();
+        // } 
+        // while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
         enemyAI.enabled = true;
-        enemyAI.stopMovement = true;
         hasCrawled = true;
         isDead = false;
         health  = crawlHealth;
