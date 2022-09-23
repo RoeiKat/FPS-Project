@@ -82,6 +82,7 @@ public class Gun : MonoBehaviour
     public AudioSource equipSound;
     public ParticleSystem muzzleFlash;
     public TrailRenderer tracerEffect;
+    public GameObject flashlight;
     
 
     void Start()

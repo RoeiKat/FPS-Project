@@ -11,7 +11,9 @@ public class WeaponPickup : MonoBehaviour
         if(activeWeapon)
         {
             Gun newWeapon = Instantiate(weaponPrefab);
+            newWeapon.flashlight.SetActive(true);
             StartCoroutine(activeWeapon.Equip(newWeapon));
+            Destroy(this.gameObject);
         }
     }
 }
