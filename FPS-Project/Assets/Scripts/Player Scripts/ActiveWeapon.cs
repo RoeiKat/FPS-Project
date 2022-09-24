@@ -142,13 +142,11 @@ public class ActiveWeapon : MonoBehaviour
         setActiveWeapon(newWeapon.weaponSlot);
         weaponController.Play("equip_" + weapon.weaponName);
         weapon.equipSound.Play();
-        playerMovement.canSprint = false;
         do
         {
          yield return new WaitForEndOfFrame();
         } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
         canShoot = true;
-        playerMovement.canSprint = true;
     }
 
     void setActiveWeapon(WeaponSlot weaponSlot)
@@ -190,19 +188,18 @@ public class ActiveWeapon : MonoBehaviour
         var weapon = getWeapon(index);
         if (weapon) 
         {
+            weapon.equipSound.Play();
             weapon.setPrefabRecoilStats();
             hud.updateGun(weapon);
             GameObject weaponMesh = weapon.transform.GetChild(0).gameObject;
             weaponMesh.gameObject.SetActive(true);
             weaponController.Play("equip_" + weapon.weaponName);
             weapon.equipSound.Play();
-            playerMovement.canSprint = false;
             do
             {
                 yield return new WaitForEndOfFrame();
             } while (weaponController.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
             canShoot = true;
-            playerMovement.canSprint = true;
         }
     }
 

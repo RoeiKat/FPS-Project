@@ -42,7 +42,7 @@ public class EnemyAI : MonoBehaviour
                 faceTarget();
                 StartCoroutine(zombieScream());
             }
-            else 
+            if(!startScream) 
             {
                 engageTarget();
             }
@@ -127,18 +127,14 @@ public class EnemyAI : MonoBehaviour
 
     IEnumerator zombieScream()
     { 
+        navMeshAgent.enabled = false;
         startScream = false;
         stopMovement = true;
-        Debug.Log("Screaming");
         sfx.clip = screamSound;
         sfx.Play();
-        animator.SetBool("scream", true);
-        do
-        {
-            yield return new WaitForEndOfFrame();
-        } 
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
-        animator.SetBool("scream", false);
+        animator.SetTrigger("scream");
+        yield return new WaitForSeconds(1.5f);
+        navMeshAgent.enabled = true;
         stopMovement = false;
         engageTarget();
     }

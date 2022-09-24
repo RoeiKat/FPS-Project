@@ -77,7 +77,7 @@ GameObject:
   - component: {fileID: 199642364234182386}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -176,7 +176,7 @@ MonoBehaviour:
   startScream: 1
   hitCheck: {fileID: 199642365013551064}
   sfx: {fileID: 2123093459367198577}
-  idleSound: {fileID: 8300000, guid: 2255e26e40d09c24da5f22ad070b8a66, type: 3}
+  idleSound: {fileID: 0}
   attackSound: {fileID: 8300000, guid: eb098e084c98c9140b21c8bc3ab27721, type: 3}
   screamSound: {fileID: 8300000, guid: 9b63048004dfd2a4eb0a0f3a6dc517e4, type: 3}
 --- !u!95 &199642364234182386
@@ -944,8 +944,8 @@ AudioSource:
   m_GameObject: {fileID: 2123093459367198576}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 2255e26e40d09c24da5f22ad070b8a66, type: 3}
+  OutputAudioMixerGroup: {fileID: 24300002, guid: db84a3cd4c826b143afa6de22a2e8fd8, type: 2}
+  m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -956,7 +956,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 3
+  MaxDistance: 1.5
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0

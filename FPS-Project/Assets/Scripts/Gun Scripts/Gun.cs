@@ -146,7 +146,7 @@ public class Gun : MonoBehaviour
             bullet.tracer.transform.position = hitInfo.point;
             //Damaging the target
             EnemyHealth targetHealth = hitInfo.transform.GetComponent<EnemyHealth>();
-            if (hitInfo.transform.name == "Enemy")
+            if (hitInfo.transform.tag == "Enemy")
             {
                 Destroy(hitVFX);
             }
@@ -178,6 +178,7 @@ public class Gun : MonoBehaviour
 
     public void startReload()
     {
+        equipSound.Play();
         if(bulletsLeft <= 0) return;
 
         int bulletsToLoad = bulletsPerMag - currentBullets;
