@@ -27,7 +27,7 @@ public class EnemyHealth : MonoBehaviour
     {
         health -= dmg;
         enemyAI.damageTaken();
-        if(health <= 0)
+        if(health <= 0 && isDead == false)
         {
             die();
         }
@@ -35,6 +35,15 @@ public class EnemyHealth : MonoBehaviour
     void die()
     {
         isDead = true;
+        randomDeath = Random.Range(1,8);
+        if (randomDeath == 1 || randomDeath == 2 || randomDeath == 3 || randomDeath == 4)
+        {
+            randomDeath = 1;
+        }
+        if (randomDeath == 5 || randomDeath == 6 || randomDeath == 7 || randomDeath == 8)
+        {
+            randomDeath = 2;
+        }
         if(isDead)
         {
             enemyAI.stopMovement = true;
@@ -63,13 +72,10 @@ public class EnemyHealth : MonoBehaviour
     IEnumerator deathAnimationHandler(int deathIndex)
     {
         enemyAI.enabled = false;
+        enemyAI.stopMovement = true;
         enemyAI.sfx.Stop();
         animator.Play("zombie_death" + deathIndex);
-        do
-        {
-            yield return new WaitForEndOfFrame();
-        } 
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        yield return new WaitForSeconds(0);
         Destroy(gameObject, destroyTimer);
     }
 
@@ -80,12 +86,8 @@ public class EnemyHealth : MonoBehaviour
         enemyAI.sfx.Stop();
         animator.Play("zombie_death2");
         yield return new WaitForSeconds(timeTillCrawl);
-        // do
-        // {
-        //     yield return new WaitForEndOfFrame();
-        // } 
-        // while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
         enemyAI.enabled = true;
+        enemyAI.stopMovement = false;
         hasCrawled = true;
         isDead = false;
         health  = crawlHealth;

@@ -40,7 +40,6 @@ public class ReloadWeapon : MonoBehaviour
 
     void onAnimationEvent(string eventName)
     {
-        Debug.Log(eventName);
         switch (eventName)
         {
             case "cant_shoot":

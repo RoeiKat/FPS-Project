@@ -82,7 +82,6 @@ public class Gun : MonoBehaviour
     public AudioSource equipSound;
     public ParticleSystem muzzleFlash;
     public TrailRenderer tracerEffect;
-    public GameObject flashlight;
     
 
     void Start()
@@ -139,14 +138,13 @@ public class Gun : MonoBehaviour
         if(Physics.Raycast(ray, out hitInfo, distance, ~playerLayer))
         {
             //Effects
-            Debug.Log(hitInfo.transform);
             GameObject hitVFX = Instantiate(wallHitPrefab, hitInfo.point, Quaternion.FromToRotation(Vector3.forward, hitInfo.normal));
             hitVFX.transform.parent = hitInfo.transform;
             bullet.time = bulletMaxLifeTime;
             bullet.tracer.transform.position = hitInfo.point;
             //Damaging the target
             EnemyHealth targetHealth = hitInfo.transform.GetComponent<EnemyHealth>();
-            if (hitInfo.transform.tag == "Enemy")
+            if (hitInfo.transform.tag == "Enemy" || hitInfo.transform.tag == "Trigger")
             {
                 Destroy(hitVFX);
             }
@@ -178,7 +176,6 @@ public class Gun : MonoBehaviour
 
     public void startReload()
     {
-        equipSound.Play();
         if(bulletsLeft <= 0) return;
 
         int bulletsToLoad = bulletsPerMag - currentBullets;

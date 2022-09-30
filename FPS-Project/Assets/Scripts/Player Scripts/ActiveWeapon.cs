@@ -22,7 +22,6 @@ public class ActiveWeapon : MonoBehaviour
     public Animator weaponAnimaton;
 
     public Camera fpsCam;
-    public Camera mainCamera;
     private float cameraFOV;
     public int cameraZoom;
     public float zoomSpeed;
@@ -66,14 +65,12 @@ public class ActiveWeapon : MonoBehaviour
                 adsWeapon = true;
                 weaponController.SetBool("ads_weapon", true);
                 zoomCamera(fpsCam);
-                zoomCamera(mainCamera);
             }
             else 
             {
                 adsWeapon = false;
                 weaponController.SetBool("ads_weapon", false);
                 unZoomCamera(fpsCam);
-                unZoomCamera(mainCamera);
             }
             int weaponKind = (int)weapon.autoOrSemi;
             if(weaponKind == 0)
@@ -141,6 +138,7 @@ public class ActiveWeapon : MonoBehaviour
         equipped_weapon[weaponSlotIndex] = weapon;
         setActiveWeapon(newWeapon.weaponSlot);
         weaponController.Play("equip_" + weapon.weaponName);
+        weapon.weaponAnimaton.SetTrigger("equip");
         weapon.equipSound.Play();
         do
         {
@@ -194,6 +192,7 @@ public class ActiveWeapon : MonoBehaviour
             GameObject weaponMesh = weapon.transform.GetChild(0).gameObject;
             weaponMesh.gameObject.SetActive(true);
             weaponController.Play("equip_" + weapon.weaponName);
+            weapon.weaponAnimaton.SetTrigger("equip");
             weapon.equipSound.Play();
             do
             {

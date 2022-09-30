@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class ProvokeAll : MonoBehaviour
 {
+    public GameObject[] enemyGroups;
     private void OnTriggerEnter(Collider other)
     {
         provokeAllOnHit();
@@ -11,10 +12,14 @@ public class ProvokeAll : MonoBehaviour
     
     public void provokeAllOnHit()
     {
-        foreach (Transform child in transform)
+        for(int i = 0; i < enemyGroups.Length; i++)
         {
-            EnemyAI enemyAI = child.GetComponent<EnemyAI>();
-            enemyAI.isProvoked = true;
+            foreach (Transform child in enemyGroups[i].transform)
+            {
+                EnemyAI enemyAI = child.GetComponent<EnemyAI>();
+                if(enemyAI == null ) return;
+                enemyAI.isProvoked = true;
+            }
         }
     }
 }

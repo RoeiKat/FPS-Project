@@ -17,7 +17,10 @@ public class SettingsMenu : MonoBehaviour
 
     void Start()
     {
+        if(mouseLook && mouseSensSlider != null)
+        {
         mouseSensSlider.value = mouseLook.mouseSens;
+        }
         resolutions = Screen.resolutions;
 
         resolutionDropdown.ClearOptions();

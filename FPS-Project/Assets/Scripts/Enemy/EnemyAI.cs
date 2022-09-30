@@ -6,7 +6,7 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     public NavMeshAgent navMeshAgent;
-    public Transform target;
+    public GameObject target;
     [SerializeField] float turnSpeed;
     Animator animator;
     public float dmg = 10f;
@@ -26,6 +26,7 @@ public class EnemyAI : MonoBehaviour
 
     void Start()
     {
+        target = GameObject.FindGameObjectWithTag("Player");
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponent<NavMeshAgent>();
         sfx.Play();
@@ -34,7 +35,7 @@ public class EnemyAI : MonoBehaviour
     void Update()
     {
         animator.SetFloat("Speed", navMeshAgent.velocity.magnitude);
-        distanceToTarget = Vector3.Distance(target.position, transform.position);
+        distanceToTarget = Vector3.Distance(target.transform.position, transform.position);
         if(isProvoked)
         {
             if(startScream)
@@ -96,7 +97,7 @@ public class EnemyAI : MonoBehaviour
             sfx.clip = screamSound;
             sfx.Play();
         }
-        navMeshAgent.SetDestination(target.position);
+        navMeshAgent.SetDestination(target.transform.position);
         hitCheck.GetComponent<HitHandler>().enabled = false;
     }
     
@@ -109,18 +110,14 @@ public class EnemyAI : MonoBehaviour
         sfx.Play();
         animator.SetBool("attack",true);
         hitCheck.GetComponent<HitHandler>().enabled = true;
-        do
-        {
-            yield return new WaitForEndOfFrame();
-        } 
-        while (animator.GetCurrentAnimatorStateInfo(0).normalizedTime < 1.0f);
+        yield return new WaitForSeconds(2f);
         isAttacking = false;
         stopMovement = false;
     }
 
     private void faceTarget()
     {
-        Vector3 direction = (target.position - transform.position).normalized;
+        Vector3 direction = (target.transform.position - transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0 , direction.z));
         transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, turnSpeed * Time.deltaTime);
     }
@@ -133,7 +130,7 @@ public class EnemyAI : MonoBehaviour
         sfx.clip = screamSound;
         sfx.Play();
         animator.SetTrigger("scream");
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.7f);
         navMeshAgent.enabled = true;
         stopMovement = false;
         engageTarget();
