@@ -33,7 +33,6 @@ public class HUDController : MonoBehaviour
             ammoHUD.text = ("&");
         }
         healthHUD.text = playerHealth.health.ToString();
-        damageTest();
         setSlider();
     }
 
@@ -52,14 +51,6 @@ public class HUDController : MonoBehaviour
         else
         {
             fill.color = new Color32(132, 250, 131, 255);
-        }
-    }
-
-    public void damageTest()
-    {
-        if(Input.GetKeyDown(KeyCode.G))
-        {
-            playerHealth.TakeDamage(10);
         }
     }
 

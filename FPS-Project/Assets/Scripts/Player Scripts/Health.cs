@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.Audio;
 using UnityEngine;
 
 public class Health : MonoBehaviour
 {
     public float health = 100f;
+    public PauseMenu pauseMenu;
+    public GameObject deathMenuUI;
 
     public void TakeDamage(float dmg)
     {
@@ -16,6 +19,10 @@ public class Health : MonoBehaviour
     }
     void Die()
     {
-        Destroy(gameObject);
+        Cursor.lockState = CursorLockMode.Confined;
+        Time.timeScale = 0f;
+        AudioListener.pause = true;
+        pauseMenu.disablePauseMenu = true;
+        deathMenuUI.SetActive(true);
     }
 }

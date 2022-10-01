@@ -144,6 +144,7 @@ public class Gun : MonoBehaviour
             bullet.tracer.transform.position = hitInfo.point;
             //Damaging the target
             EnemyHealth targetHealth = hitInfo.transform.GetComponent<EnemyHealth>();
+            Debug.Log(hitInfo.transform.name);
             if (hitInfo.transform.tag == "Enemy" || hitInfo.transform.tag == "Trigger")
             {
                 Destroy(hitVFX);

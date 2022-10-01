@@ -6,8 +6,8 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
+    public bool disablePauseMenu = false;
     public bool gamePause = false;
-    public AudioMixer audioMixer;
     public GameObject pauseMenuUI;
     private float currentAudioSet;
     public ActiveWeapon activeWeapon;
@@ -17,13 +17,16 @@ public class PauseMenu : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if(gamePause)
+            if(!disablePauseMenu)
             {
-                Resume();
-            }
-            else
-            {
-                Pause();
+                if(gamePause)
+                {
+                    Resume();
+                }
+                else
+                {
+                    Pause();
+                }
             }
         }
     }

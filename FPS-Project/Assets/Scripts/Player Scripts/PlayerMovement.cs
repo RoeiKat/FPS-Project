@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -30,6 +31,7 @@ public class PlayerMovement : MonoBehaviour
     {
         sfx = GetComponent<AudioSource>();
         activeWeapon = GetComponent<ActiveWeapon>();
+        AudioListener.pause = false;
         sfx.clip = audioClips[0];
         sfx.enabled = false;
     }
