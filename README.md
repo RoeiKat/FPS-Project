@@ -76,12 +76,4 @@ You can download and play the game directly:
 
 ---
 
-## 📩 Contact
-
-Roei Katabi  
-📧 roeikatabi@gmail.com  
-🔗 GitHub: https://github.com/RoeiKat
-
----
-
 ## Have fun and GOOD LUCK ! 
